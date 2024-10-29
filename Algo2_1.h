@@ -4,12 +4,20 @@
 #include <stdio.h>
 #include "Algo1.h"
 
-int valeurDansMatrice (int i, int j, int s, int k, int **m) ; 
-int trouveValeurSuiv (int i, int j, int s, int k, int **m, int *cap) ; 
-int **createMat (int s, int k) ;
-int **initialiseMat (int s, int k, int *cap) ; 
-void afficheMat (int s, int k, int **mat) ; 
-int Algo2_1 (int *T) ; 
+typedef struct _Matrice1
+{
+    PbResoudre *p ; 
+    int **m ; 
+} Mat1;
+
+
+int valeurDansMatrice1 (int i, int j, Mat1 *mat) ; 
+int calculeCoef1 (int i, int j, Mat1 *mat) ; 
+int **creeMat1 (PbResoudre *prob) ; 
+Mat1 *initialiseMat1 (PbResoudre *prob) ; 
+void libereMat1 (Mat1 *mat) ; 
+void afficheMat1 (Mat1 *mat) ; 
+int Algo2_1 (PbResoudre *p) ; 
 
 
 

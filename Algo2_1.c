@@ -4,14 +4,14 @@
 #include "Algo2_1.h"
 
 /*Dans ce cas, on considère que la matrice est de dimention (s + 1) * (k + 1)*/
-// Retourne la valeur (i, j) contenue dans la matrice m, INT_MAX le cas écheant 
-int valeurDansMatrice (int i, int j, int s, int k, int **m)
+// Retourne la valeur (i, j) contenue dans la matrice mat->m, INT_MAX le cas écheant 
+int valeurDansMatrice1 (int i, int j, Mat1 *mat)
 {
-    if ((i < 0 || j < 0) || (i > s || j > k))
+    if ((i >= 0) && (j >= 0) && (i <= mat->p->S) && (j <= mat->p->k))
     {
-        return INT_MAX ; 
+        return mat->m[i][j] ; 
     }
-    return m[i][j] ; 
+    return INT_MAX ; 
 }
 
 /*
@@ -21,70 +21,74 @@ Trouve la valeur suivante du coefficient m(i, j), avec :
 - i : la quantité restante à stocker 
 - j : le pot considéré 
 */
-int trouveValeurSuiv (int i, int j, int s, int k, int **m, int *cap)
+int calculeCoef1 (int i, int j, Mat1 *mat)
 {
-    int sameLineCoef = valeurDansMatrice(i, j - 1, s, k, m) ; 
-    int sameColumnCoef = valeurDansMatrice(i - cap[j], j, s, k, m) ; 
-    if (sameColumnCoef == INT_MAX)
+    int memeLigneCoef = valeurDansMatrice1 (i, j - 1, mat) ; 
+    int memeColonneCoef = valeurDansMatrice1 (i - mat->p->tab[j - 1], j, mat) ; 
+    if (memeColonneCoef == INT_MAX)
     {
-        sameColumnCoef = INT_MAX - 1 ; 
+        memeColonneCoef = INT_MAX - 1 ; 
     }
-    return minimum(sameLineCoef, sameColumnCoef + 1) ; 
+
+    return minimumInt(memeLigneCoef, memeColonneCoef + 1) ; 
 }
 
 // Renvoie une matrice d'entiers non initialisé de taille (s+1) * (k+1)
-int **createMat (int s, int k) 
+int **creeMat1 (PbResoudre *prob) 
 {
-    int **Mat = malloc(sizeof(int*)*(s+1)) ; 
+    int **Mat = malloc(sizeof(int*)*(prob->S+1)) ; 
 
-    for (int i = 0 ; i < s + 1 ; i++)
+    for (int i = 0 ; i < prob->S + 1 ; i++)
     {
-        Mat[i] = malloc(sizeof(int)*(k + 1)) ; 
+        Mat[i] = malloc(sizeof(int)*(prob->k + 1)) ; 
     }
 
     return Mat ; 
 }
 
 // Initalise la matrice des pots nécessaires, avec les capacités des pots dans cap 
-int **initialiseMat (int s, int k, int *cap)
+Mat1 *initialiseMat1 (PbResoudre *prob)
 {
-    int **res = createMat(s, k) ; 
+    Mat1 *res = malloc(sizeof(Mat1)) ; 
 
-    for (int i = 0 ; i < s + 1 ; i++)
+    res->m = creeMat1(prob) ; 
+    res->p = copiePbResoudre(prob) ; 
+
+    for (int i = 0 ; i < prob->S + 1 ; i++)
     {
-        res[i][0] = INT_MAX ; 
+        res->m[i][0] = INT_MAX ; 
     }
 
-    for (int j = 1 ; j < k + 1 ; j++)
+    for (int j = 1 ; j < prob->k + 1 ; j++)
     {
-        res[0][j] = 0 ; 
+        res->m[0][j] = 0 ; 
     }
 
-    for (int j = 1 ; j < k + 1 ; j++)
+    for (int i = 1 ; i < prob->S + 1 ; i++)
     {
-        for (int i = 1 ; i < s + 1 ; i++)
+        for (int j = 1 ; j < prob->k + 1 ; j++)
         {
-            res[i][j] = trouveValeurSuiv(i, j, s, k, res, cap) ; 
+            res->m[i][j] = calculeCoef1(i, j, res) ; 
         }
     }
 
     return res ; 
 }
 
-void afficheMat (int s, int k, int **mat)
+void afficheMat1 (Mat1 *mat)
 {
-    for (int i = 0 ; i < s + 1 ; i++) 
+    for (int i = 0 ; i < mat->p->S + 1 ; i++) 
     {
         printf("[") ; 
-        for (int j = 0 ; j < k + 1 ; j++)
+        for (int j = 0 ; j < mat->p->k + 1 ; j++)
         {
-            if (mat[i][j] == INT_MAX)
+            if (mat->m[i][j] == INT_MAX)
             {
                 printf("+inf ") ; 
             }
             else 
             {
-                printf("%d ", mat[i][j]) ; 
+                printf("%d ", mat->m[i][j]) ; 
             }
         }
         printf("]\n") ; 
@@ -92,22 +96,22 @@ void afficheMat (int s, int k, int **mat)
 }
 
 // Libère la mémoire occupé par une matrice de taille (s+1)*(k+1)
-void libereMat (int s, int k, int **mat)
+void libereMat1 (Mat1 *mat)
 {
-    for (int i = 0 ; i < s + 1 ; i++)
+    for (int i = 0 ; i < mat->p->S + 1 ; i++)
     {
-        free(mat[i]) ; 
+        free(mat->m[i]) ; 
     }
+    liberePbResoudre(mat->p) ; 
+    free(mat->m) ; 
     free(mat) ; 
 }
 
-int Algo2_1 (int *T)
+int Algo2_1 (PbResoudre *p)
 {
-    int S = T[0] ; 
-    int k = T[1] ; 
-    int *cap = copieTab(2, T, k+2) ; 
-    int **Mat = initialiseMat(S, k, cap) ; 
-    int res = Mat[S][k] ; 
-    libereMat(S, k, Mat) ; 
-    return Mat[S][k] ; 
+    Mat1 *mat = initialiseMat1(p) ; 
+    int res = mat->m[mat->p->S][mat->p->k] ; 
+    afficheMat1(mat) ; 
+    libereMat1(mat) ; 
+    return res ; 
 }

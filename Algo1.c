@@ -3,7 +3,7 @@
 #include "Algo1.h"
 
 // Minimum entre a et b des relatifs 
-int minimum (int a, int b)
+int minimumInt (int a, int b)
 {
     if (a < b)
     {
@@ -42,17 +42,28 @@ int Aux1(int s, int i,int *cap)
     {
         V2 -= 1 ; 
     }
-    return minimum(V1, V2+1) ; 
+    return minimumInt(V1, V2+1) ; 
 }
 
 /* Renvoie la valeur de M(S, k), en prenant en paramètre un tableau qui est dans le format suivant : 
 T[0] = S ;  T[1] = k ; T[i] = V[i-2] pour tout i < k*/ 
-int Algo1 (int *T)
+int Algo1 (PbResoudre *p)
 {
-    int S = T[0] ; 
-    int k = T[1] ; 
-    int *cap = copieTab(2, T, k+2) ; 
-    int res = Aux1(S, k, cap) ; 
-    free(cap) ; 
+    int res = Aux1(p->S, p->k, p->tab) ; 
     return res ; 
+}
+
+PbResoudre *copiePbResoudre(PbResoudre *p)
+{
+    PbResoudre *res = malloc(sizeof(PbResoudre)) ; 
+    res->k = p->k ; 
+    res->S = p->S ; 
+    res->tab = copieTab(0, p->tab, p->k) ; 
+    return res ; 
+}
+
+void liberePbResoudre (PbResoudre *p)
+{
+    free(p->tab) ; 
+    free(p) ; 
 }

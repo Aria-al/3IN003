@@ -4,134 +4,123 @@
 #include "Algo2_2.h"
 
 /*Dans ce cas, on considère que la matrice est de dimention (s + 1) * (k + 1) 
-Pour toute case (i, j) de la matrice, */
-// Retourne la liste (i, j) contenue dans la matrice m, NULL le cas écheant 
-int* valeurDansMatrice (int i, int j, int s, int k, int ***m)
-{
-    if ((i < 0 || j < 0) || (i > s || j > k))
-    {
-        return NULL ; 
-    }
-    return m[i][j] ; 
-}
+Et que chaque coefficient (i, j) est un array de taille k+1, et M[i][j][1 : ] 
+est la liste des nombres de pots employés pour obtenir M(i, j), avec 
+M[i][j][0] = somme des M[i][j][1 : ]*/
 
-/*
-Trouve la valeur suivante du coefficient m(i, j), avec : 
-- cap : le tableau des capacités de pots 
-- m : matrice de dimension (s + 1) * (k + 1)
-- i : la quantité restante à stocker 
-- j : le pot considéré 
-*/
-int *donneValeurSuivante (int i, int j, int s, int k, int ***m, int *cap)
+// Retourne 1 si t1[0] < t2[0] + 1 ou t2 == NULL, 0 si t1[0] >= t2[0] + 1 ou t1 == NULL 
+int minimumTab (int* t1, int *t2) 
 {
-    int *res = NULL ;  
-    int *sameLineArray = valeurDansMatrice(i, j - 1, s, k, m) ; 
-    int *sameColumnArray = valeurDansMatrice(i - cap[j], j, s, k, m) ; 
-    if ((!sameLineArray) && (!sameColumnArray))
+    if (!t1)
     {
-        printf("Erreur dans donneValeurSuivante : pointeurs vides\n") ; 
-        return NULL ; 
+        return 0 ; 
     }
-    if (!sameLineArray)
+    else if (!t2)
     {
-        res = copieTab(0, sameColumnArray, k+1) ; 
-        res[0] += 1 ; 
-        res[j] += 1 ; 
-        return sameColumnArray ; 
-    }
-    else if (!sameColumnArray)
-    {
-        res = copieTab(0, sameLineArray, k+1) ; 
-        res[0] += 1 ; 
-        res[j - 1] += 1 ; 
-        return sameLineArray ; 
+        return 1 ; 
     }
     else 
     {
-
+        return t1[0] < t2[0] + 1 ; 
     }
-    
-
-
-    return minimum(sameLineCoef, sameColumnCoef + 1) ; 
 }
 
-// Renvoie une matrice d'entiers non initialisé de taille (s+1) * (k+1)
-int **createMat (int s, int k) 
+// Retourne l'array à la coordonné (i, j), NULL si c'est impossible
+int *valeurDansMatrice2 (int i , int j, Mat2 *mat)
 {
-    int **Mat = malloc(sizeof(int*)*(s+1)) ; 
-
-    for (int i = 0 ; i < s + 1 ; i++)
+    if ((i >= 0) && (j >= 0) && (i <= mat->p->S + 1) && (j <= mat->p->k +1))
     {
-        Mat[i] = malloc(sizeof(int)*(k + 1)) ; 
+        return mat->m[i][j] ; 
     }
-
-    return Mat ; 
+    return NULL ; 
 }
 
-// Initalise la matrice des pots nécessaires, avec les capacités des pots dans cap 
-int **initialiseMat (int s, int k, int *cap)
+// Calcule le coefficient (i, j)
+int *calculeCoef2 (int i, int j, Mat2 *mat) 
 {
-    int **res = createMat(s, k) ; 
-
-    for (int i = 0 ; i < s + 1 ; i++)
+    int *memeLigneCoef = valeurDansMatrice2(i, j - 1, mat) ; 
+    int *memeColonneCoef = valeurDansMatrice2(i - mat->p->tab[j - 1], j, mat) ; 
+    int d = minimumTab(memeLigneCoef, memeColonneCoef) ; 
+    printf("Decision : %d", d) ; 
+    printf(" %p\n", memeColonneCoef) ;
+    // memeColonneCoef est nul alors que devrait être non nul  
+    if (d)
     {
-        res[i][0] = INT_MAX ; 
+        printf("C2") ; 
+        return copieTab(0, memeLigneCoef, mat->p->k + 1) ; 
     }
-
-    for (int j = 1 ; j < k + 1 ; j++)
+    else
     {
-        res[0][j] = 0 ; 
+        printf("C1") ; 
+        int *res = copieTab(0, memeColonneCoef, mat->p->k + 1) ; 
+        res[0] += 1 ; 
+        res[j + 1] += 1 ; 
+        return res ; 
     }
+}
 
-    for (int j = 1 ; j < k + 1 ; j++)
+int ***creeMat2(PbResoudre *prob) 
+{
+    int ***res = malloc(sizeof(int**) * (prob->S + 1)) ; 
+    for (int i = 0 ; i < prob->S + 1; i++)
     {
-        for (int i = 1 ; i < s + 1 ; i++)
-        {
-            res[i][j] = trouveValeurSuiv(i, j, s, k, res, cap) ; 
-        }
+        res[i] = malloc(sizeof(int*) * (prob->k + 1)) ; 
     }
-
     return res ; 
 }
 
-void afficheMat (int s, int k, int **mat)
+Mat2 *inintialiseMat2(PbResoudre *prob)
 {
-    for (int i = 0 ; i < s + 1 ; i++) 
+    Mat2 *res = malloc(sizeof(Mat2)) ; 
+    res->m = creeMat2(prob) ; 
+    res->p = copiePbResoudre(prob) ;  
+
+    for (int i = 0 ; i < prob->S + 1 ; i++)
     {
-        printf("[") ; 
-        for (int j = 0 ; j < k + 1 ; j++)
-        {
-            if (mat[i][j] == INT_MAX)
-            {
-                printf("+inf ") ; 
-            }
-            else 
-            {
-                printf("%d ", mat[i][j]) ; 
-            }
-        }
-        printf("]\n") ; 
+        res->m[i][0] = NULL ; 
     }
+
+    for (int j = 1 ; j < prob->k + 1 ; j++)
+    {
+        res->m[0][j] = malloc(sizeof(int) * (prob->k+1)) ; 
+        for (int k = 0 ; k < prob->k + 1 ; k++)
+        {
+            res->m[0][j][k] = 0 ; 
+        }
+    }
+    
+    for (int j = 1 ; j < prob->k + 1 ; j++)
+    {
+        for (int i = 1 ; i < prob->S + 1 ; i++)
+        {
+            res->m[i][j] = calculeCoef2(i, j, res) ; 
+        }
+    }
+    
+    return res ; 
 }
 
-// Libère la mémoire occupé par une matrice de taille (s+1)*(k+1)
-void libereMat (int s, int k, int **mat)
+void libereMat2 (Mat2 *mat)
 {
-    for (int i = 0 ; i < s + 1 ; i++)
+    for (int i = 0 ; i < mat->p->S + 1 ; i++)
     {
-        free(mat[i]) ; 
+        for (int j = 0 ; j < mat->p->k + 1 ; j++)
+        {
+            if (mat->m[i][j])
+            {
+                free(mat->m[i][j]) ; 
+            }
+        }
     }
+    liberePbResoudre(mat->p) ; 
+    free(mat->m) ; 
     free(mat) ; 
 }
 
-int Algo2_1 (int *T)
+int *Algo2_2(PbResoudre *prob)
 {
-    int S = T[0] ; 
-    int k = T[1] ; 
-    int *cap = copieTab(2, T, k+2) ; 
-    int **Mat = initialiseMat(S, k, cap) ; 
-    int res = Mat[S][k] ; 
-    libereMat(S, k, Mat) ; 
-    return Mat[S][k] ; 
+    Mat2 *m = inintialiseMat2(prob) ; 
+    int *res = copieTab(0, m->m[prob->S][prob->k], prob->k + 1) ; 
+    libereMat2(m) ; 
+    return res ; 
 }
