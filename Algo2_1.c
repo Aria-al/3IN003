@@ -111,7 +111,40 @@ int Algo2_1 (PbResoudre *p)
 {
     Mat1 *mat = initialiseMat1(p) ; 
     int res = mat->m[mat->p->S][mat->p->k] ; 
-    afficheMat1(mat) ; 
+    //afficheMat1(mat) ; 
     libereMat1(mat) ; 
+    return res ; 
+}
+
+int *auxTabBocauxRequis (int i, int j, Mat1 *mat, int *tab)
+{
+    if ((i <= 0) || (j <= 0))
+    {
+        int *res = malloc(sizeof(int) * (mat->p->k)) ; 
+        for (int i = 0 ; i < mat->p->k ; i++)
+        {
+            res[i] = 0 ; 
+        }
+        return res ; 
+    }
+
+    if(valeurDansMatrice1(i, j, mat) == valeurDansMatrice1(i, j - 1, mat))
+    {
+        return auxTabBocauxRequis(i, j - 1, mat, tab) ; 
+    }
+    else if (valeurDansMatrice1(i, j, mat) == (valeurDansMatrice1(i - mat->p->tab[j - 1], j, mat) + 1))
+    {
+        int *res = auxTabBocauxRequis(i - mat->p->tab[j - 1], j, mat, tab) ; 
+        res[j - 1] += 1 ; 
+        return res ; 
+    }
+
+}
+
+// Retourne les bocaux requis pour achever la bonne capacité 
+int *tabBocauxRequis (PbResoudre *prob)
+{
+    Mat1 *mat = initialiseMat1(prob) ; 
+    int *res = auxTabBocauxRequis(mat->p->S, mat->p->k, mat, NULL) ; 
     return res ; 
 }

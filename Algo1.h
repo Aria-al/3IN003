@@ -11,9 +11,11 @@ typedef struct _problemeResoudre
 
 int minimumInt (int a, int b) ; 
 int *copieTab (int k, int *T, int len) ; 
-int Aux1(int s, int i,int *cap) ; 
+int Aux1(int s, int i,int *cap, int **tab) ; 
 int Algo1 (PbResoudre *T) ;
 PbResoudre *copiePbResoudre (PbResoudre *p) ; 
 void liberePbResoudre (PbResoudre *p) ; 
+PbResoudre *genereSystemExpo (int k, int d) ; 
+void affichePbResoudre (PbResoudre *p) ; 
 
 #endif

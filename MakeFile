@@ -2,7 +2,7 @@ CFLAGS = -g -Wall -Wextra -pedantic -Wno-unused-parameter
 CC = gcc
 HFILES = Algo1.h Algo2_1.h Algo2_2.h
 
-Main : Main.o Algo1.o Algo2_1.o Algo2_2.o
+Main : Main.o Algo1.o Algo2_1.o Algo2_2.o Algo3.o PerformancesAlgo.o
 	$(CC) -o $@ $(CFLAGS) $^ -lm
 
 %.o : %.c 

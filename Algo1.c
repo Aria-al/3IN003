@@ -25,31 +25,48 @@ int *copieTab (int k, int *T, int len)
 
 // ALGORITHME I 
 
-int Aux1(int s, int i,int *cap) 
+int Aux1(int s, int i,int *cap, int **tab) 
 {
-    if (s == 0) 
+    if ((s == 0) && (i >= 0))
     {
         return 0 ; 
     }
-    else if ((s < 0) || (i == 0))
+    else if ((s >= 1) && (i <= -1))
+    {
+        return INT_MAX ; 
+    }
+    else if ((s < 0) && (i >= 0))
     {
         return INT_MAX ; 
     }
     
-    int V1 = Aux1(s, i - 1, cap) ; 
-    int V2 = Aux1(s - cap[i], i, cap) ; 
+    int V1 = Aux1(s, i - 1, cap, tab) ; 
+    int V2 = Aux1(s - cap[i], i, cap, tab) ; 
     if (V2 == INT_MAX)
     {
-        V2 -= 1 ; 
+        return V1 ; 
     }
+
     return minimumInt(V1, V2+1) ; 
+
 }
 
 /* Renvoie la valeur de M(S, k), en prenant en paramètre un tableau qui est dans le format suivant : 
 T[0] = S ;  T[1] = k ; T[i] = V[i-2] pour tout i < k*/ 
 int Algo1 (PbResoudre *p)
 {
-    int res = Aux1(p->S, p->k, p->tab) ; 
+    affichePbResoudre(p) ; 
+    int *t = malloc(sizeof(int) * p->k) ; 
+    for (int i = 0 ; i < p->k ; i++)
+    {
+        t[i] = 0 ; 
+    }
+    int res = Aux1(p->S, p->k - 1, p->tab, &t) ; 
+    for (int i = 0 ; i < p->k ; i++)
+    {
+        printf("%d ", t[i]) ; 
+    }
+    printf("\n") ; 
     return res ; 
 }
 
@@ -66,4 +83,29 @@ void liberePbResoudre (PbResoudre *p)
 {
     free(p->tab) ; 
     free(p) ; 
+}
+
+void affichePbResoudre (PbResoudre *p)
+{
+    printf("k : %d\nS : %d\n", p->k, p->S) ; 
+    for (int i = 0 ; i < p->k ; i++)
+    {
+        printf("%d ", p->tab[i]) ; 
+    }
+    printf("\n") ; 
+}
+
+PbResoudre *genereSystemExpo (int k, int d)
+{
+    PbResoudre *res = malloc(sizeof(PbResoudre)) ; 
+    res->k = k ; 
+    res->S = 0 ; 
+    res->tab = malloc(sizeof(int) * (k)) ; 
+    int c = 1 ; 
+    for (int i = 0 ; i < k ; i++)
+    {
+        res->tab[i] = c ; 
+        c = c * d ; 
+    }
+    return res ; 
 }

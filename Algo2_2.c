@@ -41,17 +41,13 @@ int *calculeCoef2 (int i, int j, Mat2 *mat)
     int *memeLigneCoef = valeurDansMatrice2(i, j - 1, mat) ; 
     int *memeColonneCoef = valeurDansMatrice2(i - mat->p->tab[j - 1], j, mat) ; 
     int d = minimumTab(memeLigneCoef, memeColonneCoef) ; 
-    printf("Decision : %d", d) ; 
-    printf(" %p\n", memeColonneCoef) ;
     // memeColonneCoef est nul alors que devrait être non nul  
     if (d)
     {
-        printf("C2") ; 
         return copieTab(0, memeLigneCoef, mat->p->k + 1) ; 
     }
     else
     {
-        printf("C1") ; 
         int *res = copieTab(0, memeColonneCoef, mat->p->k + 1) ; 
         res[0] += 1 ; 
         res[j + 1] += 1 ; 
