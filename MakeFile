@@ -2,7 +2,17 @@ CFLAGS = -g -Wall -Wextra -pedantic -Wno-unused-parameter
 CC = gcc
 HFILES = Algo1.h Algo2_1.h Algo2_2.h
 
+MainAlt : 
+	make Main.o 
+	make Algo1.o
+	make Algo2_1.o
+	make Algo2_2.o
+	make Algo3.o
+	make PerformancesAlgo.o
+	gcc -o -Wall Main.o Algo1.o Algo2_1.o Algo2_2.o Algo3.o PerformancesAlgo.o
+
 Main : Main.o Algo1.o Algo2_1.o Algo2_2.o Algo3.o PerformancesAlgo.o
+	make Main.o
 	$(CC) -o $@ $(CFLAGS) $^ -lm
 
 %.o : %.c 

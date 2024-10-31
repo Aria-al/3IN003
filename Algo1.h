@@ -1,5 +1,8 @@
 #ifndef __ALGO1_H__
 #define __ALGO1_H__
+#include <stdlib.h>
+#include <stdio.h>
+#include <limits.h>
 
 typedef struct _problemeResoudre 
 {

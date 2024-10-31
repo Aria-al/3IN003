@@ -2,6 +2,7 @@
 #define __ALGO2_1_H__
 #include <stdlib.h>
 #include <stdio.h>
+#include <limits.h>
 #include "Algo1.h"
 
 typedef struct _Matrice1

@@ -1,5 +1,8 @@
 #ifndef __ALGO2_2_H__
 #define __ALGO2_2_H__
+#include <stdlib.h>
+#include <stdio.h>
+#include <limits.h>
 
 // Les coefficients de la matrice sont constitués d'arrays de taille k+1
 typedef struct _Matrice2

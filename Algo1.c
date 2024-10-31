@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <limits.h>
 #include "Algo1.h"
 
 // Minimum entre a et b des relatifs 
@@ -27,15 +28,11 @@ int *copieTab (int k, int *T, int len)
 
 int Aux1(int s, int i,int *cap, int **tab) 
 {
-    if ((s == 0) && (i >= 0))
+    if (s == 0)
     {
         return 0 ; 
     }
-    else if ((s >= 1) && (i <= -1))
-    {
-        return INT_MAX ; 
-    }
-    else if ((s < 0) && (i >= 0))
+    else if (((s >= 1) && (i <= -1)) || ((s < 0) && (i >= 0)))
     {
         return INT_MAX ; 
     }

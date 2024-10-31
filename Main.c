@@ -43,12 +43,8 @@ int main(int argc, char const *argv[])
     remove("Temps.txt") ; 
     printf("Mesure de temps\n") ; 
     fclose(fopen("Temps.txt", "w")); 
-    TabTemps *valeur = perfFonctionDeS(2, 5, 900000, AlgoGlout) ; 
+    TabTemps *valeur = perfFonctionDeS(2, 5, 400, 20000, Algo2_1) ; 
     ecrireListeDouble("Temps.txt", valeur) ; 
-    prob->S = 527 ; 
-    double temps = mesureTempsExec(prob, AlgoGlout) ; 
-    printf("%f\n", temps) ; 
-    printf("%d\n", Algo1(prob) == AlgoGlout(prob)) ; 
     printf("\nFin\n") ; 
 
     return 0;

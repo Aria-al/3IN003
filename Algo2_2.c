@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <limits.h>
 #include "Algo1.h"
 #include "Algo2_2.h"
 
