@@ -52,3 +52,41 @@ int testGloutonCompatible (int k, int *tab)
     }
     return 1 ; 
 }
+
+// Décale tout les nombres à partir du rang r de 1 emplacement vers la droite 
+int *bougeValeurs (int r, int *tab, int len)
+{
+    if (r < len - 1)
+    {
+        int temp = 0 ; 
+        int tempPrec = tab[r] ;  
+        for (int i = r ; i < len - 1 ; i++)
+        {
+            temp = tab[i + 1] ; 
+            tab[i + 1] = tempPrec ; 
+            tempPrec = temp ; 
+        }
+    }
+    return tab ; 
+}
+
+int valeurPresente (int *tab, int v, int len)
+{
+    
+}
+
+int *insererInt (int v, int *tab, int len)
+{
+    int p = 0 ; 
+    while (tab[p] < v)
+    {
+        p += 1 ; 
+    }
+}
+
+int *produitSystemeCapaciteAlea (int len, int pmax)
+{
+    int *res = malloc(sizeof(int) * len) ; 
+    res[0] = 1 ; 
+
+}
