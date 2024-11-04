@@ -26,7 +26,7 @@ int *copieTab (int k, int *T, int len)
 
 // ALGORITHME I 
 
-int Aux1(int s, int i,int *cap, int **tab) 
+int Aux1(int s, int i,int *cap) 
 {
     if (s == 0)
     {
@@ -37,15 +37,13 @@ int Aux1(int s, int i,int *cap, int **tab)
         return INT_MAX ; 
     }
     
-    int V1 = Aux1(s, i - 1, cap, tab) ; 
-    int V2 = Aux1(s - cap[i], i, cap, tab) ; 
+    int V1 = Aux1(s, i - 1, cap) ; 
+    int V2 = Aux1(s - cap[i], i, cap) ; 
     if (V2 == INT_MAX)
     {
         return V1 ; 
     }
-
-    return minimumInt(V1, V2+1) ; 
-
+    return minimumInt(V1, V2 + 1) ; 
 }
 
 /* Renvoie la valeur de M(S, k), en prenant en paramètre un tableau qui est dans le format suivant : 
@@ -53,17 +51,8 @@ T[0] = S ;  T[1] = k ; T[i] = V[i-2] pour tout i < k*/
 int Algo1 (PbResoudre *p)
 {
     affichePbResoudre(p) ; 
-    int *t = malloc(sizeof(int) * p->k) ; 
-    for (int i = 0 ; i < p->k ; i++)
-    {
-        t[i] = 0 ; 
-    }
-    int res = Aux1(p->S, p->k - 1, p->tab, &t) ; 
-    for (int i = 0 ; i < p->k ; i++)
-    {
-        printf("%d ", t[i]) ; 
-    }
-    printf("\n") ; 
+    int res = Aux1(p->S, p->k - 1, p->tab) ; 
+    printf("Nombre de bocaux employes : %d\n", res) ; 
     return res ; 
 }
 

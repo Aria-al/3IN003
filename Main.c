@@ -19,10 +19,12 @@ int main(int argc, char const *argv[])
         }
     }
     */
+
     PbResoudre *prob = malloc(sizeof(PbResoudre)) ; 
     prob->S = V[0] ; 
     prob->k = V[1] ; 
     prob->tab = copieTab(2, V, V[1] + 2) ; 
+    /*
     printf ("Algorithme 2 : \n") ; 
     int res = Algo2_1(prob) ; 
     printf("%d\n", res) ; 
@@ -46,6 +48,21 @@ int main(int argc, char const *argv[])
     TabTemps *valeur = perfFonctionDeS(2, 5, 400, 20000, Algo2_1) ; 
     ecrireListeDouble("Temps.txt", valeur) ; 
     printf("\nFin\n") ; 
+    */
+    Algo1(prob) ; 
+
+    int len = 7 ; 
+    int *T = malloc(sizeof(int) * len) ; 
+    for (int i = 0 ; i < len - 3; i++)
+    {
+        T[i] = i + 1 ; 
+    }
+    for (int i = len - 3 ; i < len ; i++ )
+    {
+        T[i] = INT_MAX ; 
+    }
+    printf("%d\n", auxRechercheDicho(INT_MAX, T, 0, 7)) ; 
+
 
     return 0;
 }
