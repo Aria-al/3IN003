@@ -20,8 +20,8 @@ void libereMat1 (Mat1 *mat) ;
 void afficheMat1 (Mat1 *mat) ; 
 int Algo2_1 (PbResoudre *p) ; 
 
-int *auxTabBocauxRequis (int i, int j, Mat1 *mat, int *tab); 
-int *tabBocauxRequis (PbResoudre *prob) ; 
+int *auxTabBocauxRequisAlgo2 (int i, int j, Mat1 *mat, int *tab); 
+int *tabBocauxRequisAlgo2 (PbResoudre *prob) ; 
 
 
 #endif 

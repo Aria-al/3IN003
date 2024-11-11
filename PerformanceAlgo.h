@@ -11,6 +11,7 @@
 
 typedef struct _tableTemps
 {
+    int nbVal ; 
     int len ; 
     double *listeTemps ;
 } TabTemps ;
@@ -18,5 +19,6 @@ typedef struct _tableTemps
 double mesureTempsExec (PbResoudre *prob, int (*f) (PbResoudre*) ) ; 
 double *copieTabDouble (int oldLen, int newLen, double *tab) ; 
 TabTemps *perfFonctionDeS (int d, int k, int valMaxS, int nbMesure, int (*f) (PbResoudre*)) ; 
+TabTemps *perfFonctionDeK (int d, int s, int valMaxK, int nbMesure, int (*f) (PbResoudre*)) ; 
 void ecrireListeDouble (char *filename, TabTemps *tab) ; 
 #endif

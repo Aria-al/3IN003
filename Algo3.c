@@ -23,6 +23,30 @@ int AlgoGlout (PbResoudre *prob)
     return res ; 
 }
 
+int* tabBocauxRequisAlgo3 (PbResoudre *prob)
+{
+    int *res = malloc(sizeof(int) * prob->k) ; 
+    for (int i = 0 ; i < prob->k ; i++)
+    {
+        res[i] = 0 ; 
+    }
+    int i = prob->k - 1 ; 
+    int q = prob->S ; 
+    int d = q - prob->tab[i] ; 
+    while (q > 0)
+    {
+        while (d < 0 && i > 0)
+        {
+            i = i - 1 ; 
+            d = q - prob->tab[i] ; 
+        }
+        q = q - prob->tab[i] ; 
+        d = q - prob->tab[i] ; 
+        res[i] += 1 ;
+    }
+    return res ; 
+}
+
 int testGloutonCompatible (int k, int *tab)
 {
     if (k >= 3)
@@ -58,14 +82,14 @@ int *bougeValeurs (int r, int *tab, int len)
 {
     if (r < len - 1)
     {
-        int temp = 0 ; 
-        int tempPrec = tab[r] ;  
+        int valeurSuivante = 0 ; 
+        int valeurPrecedente = tab[r] ;  
         tab[r] = 0 ; 
         for (int i = r ; i < len - 1 ; i++)
         {
-            temp = tab[i + 1] ; 
-            tab[i + 1] = tempPrec ; 
-            tempPrec = temp ; 
+            valeurSuivante = tab[i + 1] ; 
+            tab[i + 1] = valeurPrecedente ; 
+            valeurPrecedente = valeurSuivante ; 
         }
     }
     return tab ; 
@@ -78,9 +102,6 @@ int auxRechercheDicho (int v, int *tab, int i, int j)
     {
         return -2 ; 
     }
-    /*
-    
-    */
     else if (i - j == 1)
     {
         return v == tab[i] ; 
@@ -128,39 +149,60 @@ int valeurPresente (int *tab, int v, int len)
 
 // Insère un entier v dans la liste, retourne 1 si réuissi, 0 si la liste est pleine 
 // On suppose que les éléments non assignés sont égaux à INT_MAX
-// NE VERIFIE PAS SI L'ELEMENT EST DEJA PRESENT DANS LA LISTE 
-int insererInt (int v, int *tab, int len)
+// Si la valeur est déja présente dans la liste, elle ne l'ajoute pas 
+void insererInt (int v, int *tab, int len)
 {
-    int p = 0 ; 
-    while ((tab[p] < v) && (p < len - 1))
+    int p = rechercheDicho(v, tab, len) ; 
+    if (p != -1)
+    {
+        return ; 
+    }
+    p = 0 ; 
+    while (tab[p] < v)
     {
         p += 1 ; 
     }
-    if (p >= len)
-    {
-        return 0 ; 
-    }
-    tab = bougeValeurs(p + 1, tab, len) ; 
+    bougeValeurs(p, tab, len) ; 
     tab[p] = v ; 
-    return 1 ; 
 }
 
+// Produit un système de capacité aléatoire, on suppose aussi 
+// que pmax > len, sinon il manque des valeurs 
 int *produitSystemeCapaciteAlea (int len, int pmax)
 {
     int *res = malloc(sizeof(int) * len) ; 
-    res[0] = 1 ; 
-    for (int i = 1 ; i < len ; i++)
+    // Si pmax <= len ; on peut mettre chacun des nombres entres 1 et pmax dans la liste  
+    if (pmax <= len)
     {
-        res[i] = INT_MAX ; 
+        printf("pmax : %d <= len : %d\nLe système de capacité ne peux pas etre construit\n", pmax, len) ; 
+        return NULL ; 
     }
-    int nbInsere = 1 ; 
-    while (nbInsere < len)
+    else 
     {
-        int val = rand() % pmax ; 
-        if (rechercheDicho(val, res, len) == -1)
+        res[0] = 1 ; 
+        for (int i = 1 ; i < len ; i++)
         {
-            
+            res[i] = INT_MAX ; 
+        }
+        int nbInsere = 1 ; 
+        while (nbInsere < len)
+        {
+            int val = rand() % pmax ; 
+            if (rechercheDicho(val, res, len) == -1)
+            {
+                insererInt(val, res, len) ; 
+                nbInsere += 1 ; 
+            }
         }
     }
+    return res ; 
+}
 
+void afficheListe (int *tab, int len)
+{
+    for (int i = 0 ; i < len ; i++)
+    {
+        printf("%d ", tab[i]) ; 
+    }
+    printf("\n") ; 
 }

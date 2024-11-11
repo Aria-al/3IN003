@@ -5,12 +5,12 @@
 /*
 Renvoie un problème en lisant filename qui contient : 
 */ 
-PbResoudre *lit_probleme (char *filename) 
+PbResoudre *litProbleme (char *filename) 
 {
     FILE *f = fopen (filename, "r") ; 
     if (!f)
     {
-        printf("File not found : %s\n", filename) ; 
+        printf("Fichier non trouve : %s\n", filename) ; 
         return NULL ; 
     }
 
@@ -18,11 +18,13 @@ PbResoudre *lit_probleme (char *filename)
     int k = -1 ; 
     if (!fscanf(f, "%d", &S) || S < 0)
     {
+        printf("Erreur de formattage du fichier %s pour la valeur S\n", filename) ; 
         fclose (f) ; 
         return NULL ; 
     }
     if (!fscanf(f, "%d", &k) || k <= 0)
     {
+        printf("Erreur de formattage du fichier %s pour la valeur k\n", filename) ; 
         fclose (f) ; 
         return NULL ; 
     }
@@ -34,7 +36,6 @@ PbResoudre *lit_probleme (char *filename)
     while (i < k )
     {
         fscanf(f, "%d", &c) ; 
-        printf("Hi : %d\n",c) ; 
         res->tab[i] = c ;
         i += 1 ; 
     }

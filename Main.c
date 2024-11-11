@@ -1,68 +1,132 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include "Reader.h"
 #include "Algo2_1.h"
 #include "Algo2_2.h"
 #include "Algo1.h"
+#include "Algo3.h"
 #include "PerformanceAlgo.h"
 
-int V [] = {20, 11, 1, 2, 5, 10, 25, 50, 75, 100, 150, 200, 250} ; 
+int V [] = {100, 11, 1, 2, 5, 10, 25, 50, 75, 100, 150, 200, 250} ; 
 
 int main(int argc, char const *argv[])
 {
-    /*
-    for (int i = 2 ; i < V[k] * 4 ; i++)
+    int progr = -1 ; 
+    if (argc == 0)
     {
-        if (Algo1(i, k) != AlgoGlout(i, k))
+        printf("Pas de procedure selectionne\n") ; 
+    }
+    else
+    {
+        progr = atoi(argv[0]) ; 
+
+        // Option 1 : calculer les bocaux nécessaire pour faire le système contenu dans le fichier argv[1] par l'algorithme
+        /*
+        1 - algo1
+        2 - algo2
+        3 - algoGlouton
+        */
+        if ((progr == 1) && (argc == 3))
         {
-            printf("Erreur, systeme non-glouton-optimal pour la valeur : s = %d, A1 = %d, AG = %d\n", i, Algo1(i, k), AlgoGlout(i, k)) ; 
+            char *fileName = argv[1] ; 
+            int algoChoisi = atoi(argv[2]) ; 
+            
+            PbResoudre *prob = litProbleme(fileName) ; 
+            int *res = NULL ; 
+
+            // On choisit par défaut l'algorithme 2, il est rapide et correct 
+            switch (algoChoisi)
+            {
+            case 1 :
+                res = tabBocauxRequisAlgo1(prob) ; 
+                break;
+
+            case 2 :
+                res = tabBocauxRequisAlgo2(prob) ; 
+                break;
+
+            case 3 :
+                res = tabBocauxRequisAlgo3(prob) ; 
+                break;
+            
+            default:
+                res = tabBocauxRequisAlgo2(prob) ; 
+                break;
+            }
+
+            printf("Liste des bocaux : ") ; 
+            afficheListe(prob->tab, prob->k) ; 
+            printf("Bocaux chosis : ") ; 
+            afficheListe(res, prob->k) ; 
+
+            int nbBocaux = 0 ; 
+            for (int i = 0; i < prob->k; i++)
+            {
+                nbBocaux += res[i] ; 
+            }
+            printf("Nombre de bocaux utilisés : %d\n", nbBocaux) ; 
+
+            liberePbResoudre(prob) ; 
+            free(res) ; 
+        }
+
+        // Permet de tester si le systeme de capacité contenu dans le fichier argv[2] est glouton-compatible 
+        else if ((progr == 2) && (argc == 2)) 
+        {
+            char *fileName = argv[1] ; 
+            int algoChoisi = atoi(argv[2]) ; 
+            
+            PbResoudre *prob = litProbleme(fileName) ;    
+            printf("Le systeme : ") ; 
+            afficheListe(prob->tab, prob->k) ; 
+            if (testGloutonCompatible(prob->k, prob->tab))
+            {
+                printf("Est glouton-compatible\n") ; 
+            }
+            else 
+            {
+                printf("N'est pas glouton-compatible\n") ;
+            }
+        }
+
+        else 
+        {
+            printf("Parametre %s incorrect\n", argv[0]) ; 
         }
     }
-    */
+    // Test de glouton-compatibilité 
 
-    PbResoudre *prob = malloc(sizeof(PbResoudre)) ; 
-    prob->S = V[0] ; 
-    prob->k = V[1] ; 
-    prob->tab = copieTab(2, V, V[1] + 2) ; 
     /*
-    printf ("Algorithme 2 : \n") ; 
-    int res = Algo2_1(prob) ; 
-    printf("%d\n", res) ; 
+    srand (time(NULL)) ; 
+    int nbBocaux = 12 ; 
+    int pmax = 500 ; 
+    int gCompat = 0 ; 
+    int nbSystem = 10 ; 
 
-    printf("Algorithme 2 : variante 1\n") ; 
-    int *res2 = Algo2_2(prob) ; 
-    for (int i = 0 ; i < prob->k + 1; i++)
+    for (int i = 0 ; i < nbSystem ; i++)
     {
-        printf("%d ",res2[i]) ; 
+        int *systCap = produitSystemeCapaciteAlea(nbBocaux, pmax) ; 
+        if (testGloutonCompatible(nbBocaux, systCap)) 
+        {
+            gCompat += 1 ; 
+        } 
+        free(systCap) ; 
+        if (!(i % (nbSystem / 20)))
+        {
+            printf("Tour : %d\n", i) ; 
+        }
     }
-
-    printf("Algorithme 2 : variante 2\n") ; 
-    int *res3 = tabBocauxRequis(prob) ; 
-    for (int i = 0 ; i < prob->k ; i++)
-    {
-        printf("%d ",res3[i]) ; 
-    }
-    remove("Temps.txt") ; 
-    printf("Mesure de temps\n") ; 
-    fclose(fopen("Temps.txt", "w")); 
-    TabTemps *valeur = perfFonctionDeS(2, 5, 400, 20000, Algo2_1) ; 
-    ecrireListeDouble("Temps.txt", valeur) ; 
-    printf("\nFin\n") ; 
+    printf ("Nombre totaux de systemes : %d\nNombre de systemes glouton compatible : %d\n", nbSystem, gCompat) ; 
+    printf ("Pourcentage de systemes glouton compatible : %f%%", ((float) gCompat) * 100 / ((double) nbSystem) ) ; 
     */
-    Algo1(prob) ; 
-
-    int len = 7 ; 
-    int *T = malloc(sizeof(int) * len) ; 
-    for (int i = 0 ; i < len - 3; i++)
-    {
-        T[i] = i + 1 ; 
-    }
-    for (int i = len - 3 ; i < len ; i++ )
-    {
-        T[i] = INT_MAX ; 
-    }
-    printf("%d\n", auxRechercheDicho(INT_MAX, T, 0, 7)) ; 
+    int valqmals = 0 ; 
+    // Tests de performance 
+    TabTemps *tempsAlgo1S = perfFonctionDeS(5, 4, 800, 10, Algo1) ; 
 
 
-    return 0;
+
+    return 0 ; 
+    
+
 }

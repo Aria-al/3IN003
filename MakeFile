@@ -9,9 +9,9 @@ MainAlt :
 	make Algo2_2.o
 	make Algo3.o
 	make PerformancesAlgo.o
-	gcc -o Main Main.o Algo1.o Algo2_1.o Algo2_2.o Algo3.o PerformancesAlgo.o
+	gcc -o Main Main.o Algo1.o Algo2_1.o Algo2_2.o Algo3.o PerformancesAlgo.o Reader.o
 
-Main : Main.o Algo1.o Algo2_1.o Algo2_2.o Algo3.o PerformancesAlgo.o
+Main : Main.o Algo1.o Algo2_1.o Algo2_2.o Algo3.o PerformancesAlgo.o Reader.o
 	make Main.o
 	$(CC) -o $@ $(CFLAGS) $^ -lm
 

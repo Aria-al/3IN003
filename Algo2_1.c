@@ -117,7 +117,7 @@ int Algo2_1 (PbResoudre *p)
     return res ; 
 }
 
-int *auxTabBocauxRequis (int i, int j, Mat1 *mat, int *tab)
+int *auxTabBocauxRequisAlgo2 (int i, int j, Mat1 *mat, int *tab)
 {
     if ((i <= 0) || (j <= 0))
     {
@@ -131,11 +131,11 @@ int *auxTabBocauxRequis (int i, int j, Mat1 *mat, int *tab)
 
     if(valeurDansMatrice1(i, j, mat) == valeurDansMatrice1(i, j - 1, mat))
     {
-        return auxTabBocauxRequis(i, j - 1, mat, tab) ; 
+        return auxTabBocauxRequisAlgo2(i, j - 1, mat, tab) ; 
     }
     else if (valeurDansMatrice1(i, j, mat) == (valeurDansMatrice1(i - mat->p->tab[j - 1], j, mat) + 1))
     {
-        int *res = auxTabBocauxRequis(i - mat->p->tab[j - 1], j, mat, tab) ; 
+        int *res = auxTabBocauxRequisAlgo2(i - mat->p->tab[j - 1], j, mat, tab) ; 
         res[j - 1] += 1 ; 
         return res ; 
     }
@@ -143,9 +143,9 @@ int *auxTabBocauxRequis (int i, int j, Mat1 *mat, int *tab)
 }
 
 // Retourne les bocaux requis pour achever la bonne capacité 
-int *tabBocauxRequis (PbResoudre *prob)
+int *tabBocauxRequisAlgo2 (PbResoudre *prob)
 {
     Mat1 *mat = initialiseMat1(prob) ; 
-    int *res = auxTabBocauxRequis(mat->p->S, mat->p->k, mat, NULL) ; 
+    int *res = auxTabBocauxRequisAlgo2(mat->p->S, mat->p->k, mat, NULL) ; 
     return res ; 
 }

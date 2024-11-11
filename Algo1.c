@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <limits.h>
-#include "Algo1.h"
+#include "ALGO1.h"
 
 // Minimum entre a et b des relatifs 
 int minimumInt (int a, int b)
@@ -50,7 +50,7 @@ int Aux1(int s, int i,int *cap)
 T[0] = S ;  T[1] = k ; T[i] = V[i-2] pour tout i < k*/ 
 int Algo1 (PbResoudre *p)
 {
-    affichePbResoudre(p) ; 
+    //affichePbResoudre(p) ; 
     int res = Aux1(p->S, p->k - 1, p->tab) ; 
     printf("Nombre de bocaux employes : %d\n", res) ; 
     return res ; 
@@ -94,4 +94,39 @@ PbResoudre *genereSystemExpo (int k, int d)
         c = c * d ; 
     }
     return res ; 
+}
+
+int auxTabBocauxRequisAlgo1 (int s, int i,int *cap, int **tab)
+{
+    if (s == 0)
+    {
+        return 0 ; 
+    }
+    else if (((s >= 1) && (i <= -1)) || ((s < 0) && (i >= 0)))
+    {
+        return INT_MAX ; 
+    }
+    
+    int V1 = auxTabBocauxRequisAlgo1(s, i - 1, cap, tab) ; 
+    int V2 = auxTabBocauxRequisAlgo1(s - cap[i], i, cap, tab) ; 
+    if ((V2 == INT_MAX) || (V1 < V2 + 1))
+    {
+        return V1 ; 
+    }
+    else 
+    {
+        (*tab)[i] += 1 ; 
+        return V2 + 1 ; 
+    }
+}
+
+int *tabBocauxRequisAlgo1 (PbResoudre *p)
+{
+    int *tabRes = malloc(sizeof(int) * p->k) ; 
+    for (int i = 0 ; i < p->k ; i++)
+    {
+        tabRes[i] = 0 ; 
+    }
+    auxTabBocauxRequisAlgo1(p->S, p->k - 1, p->tab, &tabRes) ; 
+    return tabRes ; 
 }

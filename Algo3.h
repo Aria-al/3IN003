@@ -12,4 +12,7 @@ int valeurPresente (int *tab, int v, int len) ;
 int insererInt (int v, int *tab, int len) ; 
 int *produitSystemeCapaciteAlea (int len, int pmax) ; 
 int auxRechercheDicho (int v, int *tab, int i, int j) ; 
+void afficheListe (int *tab, int len) ; 
+int* tabBocauxRequisAlgo3 (PbResoudre *prob) ; 
+
 #endif

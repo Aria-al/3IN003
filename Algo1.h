@@ -1,5 +1,5 @@
-#ifndef __ALGO1_H__
-#define __ALGO1_H__
+#ifndef __ALGO1_1_H__
+#define __ALGO1_1_H__
 #include <stdlib.h>
 #include <stdio.h>
 #include <limits.h>
@@ -20,5 +20,7 @@ PbResoudre *copiePbResoudre (PbResoudre *p) ;
 void liberePbResoudre (PbResoudre *p) ; 
 PbResoudre *genereSystemExpo (int k, int d) ; 
 void affichePbResoudre (PbResoudre *p) ; 
+int auxTabBocauxRequisAlgo1 (int s, int i,int *cap, int **tab) ; 
+int *tabBocauxRequisAlgo1 (PbResoudre *p) ; 
 
 #endif
