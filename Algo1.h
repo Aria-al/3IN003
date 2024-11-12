@@ -23,4 +23,5 @@ void affichePbResoudre (PbResoudre *p) ;
 int auxTabBocauxRequisAlgo1 (int s, int i,int *cap, int **tab) ; 
 int *tabBocauxRequisAlgo1 (PbResoudre *p) ; 
 
+
 #endif

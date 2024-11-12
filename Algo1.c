@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <limits.h>
-#include "ALGO1.h"
+#include "Algo1.h"
 
 // Minimum entre a et b des relatifs 
 int minimumInt (int a, int b)
@@ -52,7 +52,6 @@ int Algo1 (PbResoudre *p)
 {
     //affichePbResoudre(p) ; 
     int res = Aux1(p->S, p->k - 1, p->tab) ; 
-    printf("Nombre de bocaux employes : %d\n", res) ; 
     return res ; 
 }
 

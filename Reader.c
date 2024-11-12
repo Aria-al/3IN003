@@ -16,13 +16,13 @@ PbResoudre *litProbleme (char *filename)
 
     int S = -1 ; 
     int k = -1 ; 
-    if (!fscanf(f, "%d", &S) || S < 0)
+    if (!fscanf(f, "%d\n", &S) || S < 0)
     {
         printf("Erreur de formattage du fichier %s pour la valeur S\n", filename) ; 
         fclose (f) ; 
         return NULL ; 
     }
-    if (!fscanf(f, "%d", &k) || k <= 0)
+    if (!fscanf(f, "%d\n", &k) || k <= 0)
     {
         printf("Erreur de formattage du fichier %s pour la valeur k\n", filename) ; 
         fclose (f) ; 
@@ -31,11 +31,12 @@ PbResoudre *litProbleme (char *filename)
     PbResoudre *res = malloc(sizeof(PbResoudre)) ;
     res->k = k ; 
     res->S = S ; 
+    res->tab = malloc(sizeof (int) * k) ; 
     int c = 0 ; 
     int i = 0 ; 
-    while (i < k )
+    while (i < k)
     {
-        fscanf(f, "%d", &c) ; 
+        fscanf(f, "%d\n", &c) ; 
         res->tab[i] = c ;
         i += 1 ; 
     }
