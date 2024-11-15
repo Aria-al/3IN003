@@ -162,6 +162,7 @@ void insererInt (int v, int *tab, int len)
     {
         p += 1 ; 
     }
+    // Il faut insérer à p-1, le prédicat n'est plus vrai à partir de p-1
     bougeValeurs(p, tab, len) ; 
     tab[p] = v ; 
 }
