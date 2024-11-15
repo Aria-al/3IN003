@@ -192,6 +192,7 @@ int *produitSystemeCapaciteAlea (int len, int pmax)
         while (nbInsere < len)
         {
             int val = rand() % pmax ; 
+            // Faire un check pour si cette valeur n'est pas 0 OU 1
             if (rechercheDicho(val, res, len) == -1)
             {
                 insererInt(val, res, len) ; 
