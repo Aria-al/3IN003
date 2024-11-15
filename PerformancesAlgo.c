@@ -18,6 +18,7 @@ double mesureTempsExec (PbResoudre *prob, int (*f) (PbResoudre*))
     return timediff ; 
 }
 
+// Ne pas copier le tableau à chaque fois que l'on dépasse sa capacité, à la place faire une seule allocation, recopier dans un tableau de bonne dimension et renvoyer ce nouveau tableau 
 double *copieTabDouble (int oldLen, int newLen, double *tab)
 {
     double *res = malloc(sizeof(double) * (newLen)) ; 
