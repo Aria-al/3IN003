@@ -168,6 +168,9 @@ void insererInt (int v, int *tab, int len)
 
 // Produit un système de capacité aléatoire, on suppose aussi 
 // que pmax > len, sinon il manque des valeurs 
+////////////////////////////////////
+////////////////////////////// ALERTE : CE CODE NE MARCHE PAS, NE BOUGE PAS LES VALEURS CORRECTEMENT 
+///// ET GENERE SOIT UN 0 OU UN 1 POUR LA PREMIERER VALEUR
 int *produitSystemeCapaciteAlea (int len, int pmax)
 {
     int *res = malloc(sizeof(int) * len) ; 
@@ -193,6 +196,24 @@ int *produitSystemeCapaciteAlea (int len, int pmax)
                 insererInt(val, res, len) ; 
                 nbInsere += 1 ; 
             }
+        }
+    }
+
+    // BAND-AID FIX, REPARER L'ERREUR
+    if (res[0] != 1)
+    {
+        int d = 0 ; 
+        if (res[0] < 1)
+        {
+            d = res[0] + 1 ; 
+        }
+        else 
+        {
+            d = -res[0] + 1 ; 
+        }
+        for (int i = 0 ; i < len ; i++)
+        {
+            res[i] += d ; 
         }
     }
     return res ; 

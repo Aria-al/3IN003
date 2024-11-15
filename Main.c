@@ -174,21 +174,76 @@ int main(int argc, char const *argv[])
         }
     }
 
+    double time1, timediff ;   
+    time1 = (double) clock() ;            
+    time1 = time1 / CLOCKS_PER_SEC ;
     // Tests de performances 
-    int valMaxS = 400 ; 
-    int nbCalc = 1 ; 
-    TabTemps **liste = malloc(sizeof(TabTemps*) * 3) ; 
-    liste[0] = perfFonctionDeS(2, 10, valMaxS, nbCalc, Algo1) ; 
-    liste[1] = perfFonctionDeS(3, 7, valMaxS, nbCalc, Algo1) ; 
-    liste[2] = perfFonctionDeS(4, 5, valMaxS, nbCalc, Algo1) ; 
-    ecrireListeDoubleSystemeExpo("TempsAlgo1.txt", liste) ; 
-    AuxFonctionLibereTripleListe(liste) ; 
     /*
-    liste[0] = perfFonctionDeS(2, 10, 100, 100, Algo2_1) ; 
-    liste[1] = perfFonctionDeS(3, 7, 100, 100, Algo2_1) ; 
-    liste[2] = perfFonctionDeS(4, 5, 100, 100, Algo2_1) ; 
-    */
+    TabTemps **liste = malloc(sizeof(TabTemps*) * 3) ; 
+    int valMaxS = 100000 ;
+    int it = 1 ;  
+    liste[0] = perfFonctionDeS(2, 13, valMaxS, Algo1) ; 
+    liste[1] = perfFonctionDeS(3, 9, liste[0]->nbVal, Algo1) ; 
+    liste[2] = perfFonctionDeS(4, 7, liste[0]->nbVal, Algo1) ; 
+    ecrireListeDoubleSystemeExpo("./Resultats/TempsAlgo1FonctionS.csv", liste) ; 
+    AuxFonctionLibereTripleListe(liste) ; 
+    printf("%d\n", it) ; 
+    it += 1 ; 
+    liste[0] = perfFonctionDeS(2, 13, valMaxS, Algo2_1) ; 
+    liste[1] = perfFonctionDeS(3, 9, liste[0]->nbVal, Algo2_1) ; 
+    liste[2] = perfFonctionDeS(4, 7, liste[0]->nbVal, Algo2_1) ; 
+    ecrireListeDoubleSystemeExpo("./Resultats/TempsAlgo2FontionS.csv", liste) ; 
+    AuxFonctionLibereTripleListe(liste) ; 
+    printf("%d\n", it) ; 
+    it += 1 ; 
+    liste[0] = perfFonctionDeS(2, 13, valMaxS, AlgoGlout) ; 
+    liste[1] = perfFonctionDeS(3, 9, liste[0]->nbVal, AlgoGlout) ; 
+    liste[2] = perfFonctionDeS(4, 7, liste[0]->nbVal, AlgoGlout) ; 
+    ecrireListeDoubleSystemeExpo("./Resultats/TempsAlgo3FontionS.csv", liste) ; 
+    AuxFonctionLibereTripleListe(liste) ; 
+    printf("%d\n", it) ; 
+    it += 1 ; 
+    int S = 100000 ; 
+    int valMaxK = 40 ; 
+    liste[0] = perfFonctionDeK(2, 400, 10, Algo1) ; 
+    liste[1] = perfFonctionDeK(3, 400, liste[0]->nbVal, Algo1) ; 
+    liste[2] = perfFonctionDeK(4, 400, liste[0]->nbVal, Algo1) ; 
+    ecrireListeDoubleSystemeExpo("./Resultats/TempsAlgo1FonctionK.csv", liste) ; 
+    AuxFonctionLibereTripleListe(liste) ; 
+    printf("%d\n", it) ; 
+    it += 1 ; 
+    liste[0] = perfFonctionDeK(2, S, valMaxK, Algo2_1) ; 
+    liste[1] = perfFonctionDeK(3, S, liste[0]->nbVal, Algo2_1) ; 
+    liste[2] = perfFonctionDeK(4, S, liste[0]->nbVal, Algo2_1) ; 
+    ecrireListeDoubleSystemeExpo("./Resultats/TempsAlgo2FonctionK.csv", liste) ; 
+    AuxFonctionLibereTripleListe(liste) ; 
+    printf("%d\n", it) ; 
+    it += 1 ; 
+    liste[0] = perfFonctionDeK(2, S, valMaxK, AlgoGlout) ; 
+    liste[1] = perfFonctionDeK(3, S, liste[0]->nbVal, AlgoGlout) ; 
+    liste[2] = perfFonctionDeK(4, S, liste[0]->nbVal, AlgoGlout) ; 
+    ecrireListeDoubleSystemeExpo("./Resultats/TempsAlgo3FonctionK.csv", liste) ; 
+    AuxFonctionLibereTripleListe(liste) ; 
+    printf("%d\n", it) ; 
+    it += 1 ; 
     free(liste) ; 
+    */
+    srand(time(NULL));
+    // Gros problème avec algo 2, ne marche pas la plupart du temps, hallucine des valeurs 
+    /*
+    
+    PbResoudre *p = litProbleme("Probleme1.txt") ; 
+    Algo2_1(p) ; 
+    p->S = 813 ; 
+    affichePbResoudre(p) ; 
+    afficheMat1(initialiseMat1(p)) ; 
+    int *tabRes = ecartRelatif(100, 5, 2, 1000) ; 
+    printf("Pire ecart max : %d\nDifference moy : %d\nNbSystemeNGC : %d\n", tabRes[0], tabRes[1], tabRes[2]) ; 
+    */
+    int *tbla = produitSystemeCapaciteAlea(5, 100) ; 
+    afficheListe(tbla, 5) ; 
+    timediff = ( ((double) clock()) / CLOCKS_PER_SEC) - time1 ;
+    printf("Temps total : %f\n", timediff) ; 
 
     return 0 ; 
     

@@ -5,7 +5,7 @@
 #include "Algo2_1.h"
 
 /*Dans ce cas, on considère que la matrice est de dimention (s + 1) * (k + 1)*/
-// Retourne la valeur (i, j) contenue dans la matrice mat->m, INT_MAX le cas écheant 
+// Retourne mat->m[i][j], INT_MAX le cas écheant 
 int valeurDansMatrice1 (int i, int j, Mat1 *mat)
 {
     if ((i >= 0) && (j >= 0) && (i <= mat->p->S) && (j <= mat->p->k))
@@ -65,9 +65,9 @@ Mat1 *initialiseMat1 (PbResoudre *prob)
         res->m[0][j] = 0 ; 
     }
 
-    for (int i = 1 ; i < prob->S + 1 ; i++)
+    for (int j = 1 ; j < prob->k + 1 ; j++)
     {
-        for (int j = 1 ; j < prob->k + 1 ; j++)
+        for (int i = 1 ; i < prob->S + 1 ; i++)
         {
             res->m[i][j] = calculeCoef1(i, j, res) ; 
         }
@@ -149,3 +149,4 @@ int *tabBocauxRequisAlgo2 (PbResoudre *prob)
     int *res = auxTabBocauxRequisAlgo2(mat->p->S, mat->p->k, mat, NULL) ; 
     return res ; 
 }
+

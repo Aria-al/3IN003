@@ -1,0 +1,9 @@
+plot "TempsAlgo2.txt" using 1:2 title "d = 2" with points 
+replot "TempsAlgo2.txt" using 1:3 title "d = 3" with points 
+replot "TempsAlgo2.txt" using 1:4 title "d = 4" with points
+set terminal postscript landscape 
+set output "GrapheAlgo2.ps"
+set xlabel "S"
+set ylabel "Temps"
+set size 1.0, 1.0
+replot 
