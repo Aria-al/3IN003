@@ -11,13 +11,12 @@
 
 typedef struct _tableTemps
 {
-    int nbVal ; 
     int len ; 
     double *listeTemps ;
 } TabTemps ;
 
 double mesureTempsExec (PbResoudre *prob, int (*f) (PbResoudre*) ) ; 
-double *copieTabDouble (int oldLen, int newLen, double *tab) ; 
+double *copieTabDouble (int newLen, double *tab) ; 
 TabTemps *perfFonctionDeS (int d, int k, int valMaxS, int (*f) (PbResoudre*)) ; 
 TabTemps *perfFonctionDeK (int d, int s, int valMaxK, int (*f) (PbResoudre*)) ; 
 int* ecartRelatif (int pmax, int nbBocaux, int f, int nbTirages) ; 

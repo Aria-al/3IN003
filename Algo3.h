@@ -5,7 +5,7 @@
 #include <limits.h>
 #include "Algo1.h" 
 
-int AlgoGlout (PbResoudre *prob) ; 
+int Algo3 (PbResoudre *prob) ; 
 int testGloutonCompatible (int k, int *tab) ; 
 int *bougeValeurs (int r, int *tab, int len) ; 
 int valeurPresente (int *tab, int v, int len) ; 

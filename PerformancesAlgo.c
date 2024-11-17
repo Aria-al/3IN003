@@ -18,17 +18,13 @@ double mesureTempsExec (PbResoudre *prob, int (*f) (PbResoudre*))
     return timediff ; 
 }
 
-// Ne pas copier le tableau à chaque fois que l'on dépasse sa capacité, à la place faire une seule allocation, recopier dans un tableau de bonne dimension et renvoyer ce nouveau tableau 
-double *copieTabDouble (int oldLen, int newLen, double *tab)
+// renvoie un tableau qui est une copie de tab, sachant que len(tab) <= oldlen
+double *copieTabDouble (int newLen, double *tab)
 {
     double *res = malloc(sizeof(double) * (newLen)) ; 
-    for (int i = 0 ; i < oldLen ; i++)
+    for (int i = 0 ; i < newLen ; i++)
     {
         res[i] = tab[i] ; 
-    }
-    for (int i = oldLen - 1 ; i < newLen ; i++)
-    {
-        res[i] = tab[oldLen - 2] ; 
     }
     return res ; 
 }
@@ -36,37 +32,27 @@ double *copieTabDouble (int oldLen, int newLen, double *tab)
 TabTemps *perfFonctionDeS (int d, int k, int valMaxS, int (*f) (PbResoudre*))
 {
     TabTemps *res = malloc(sizeof(TabTemps)) ; 
-    res->len = 50 ; 
-    res->listeTemps = malloc(sizeof(double) * res->len) ; 
-    res->nbVal = 0 ; 
+    res->len = valMaxS ; 
+    res->listeTemps = malloc(sizeof(double) * valMaxS) ; 
 
     PbResoudre *prob = genereSystemExpo (k, d) ; 
     prob->S = 1 ; 
 
     double mesure = 0 ; 
-    double *dup = NULL ; 
     double tempsGlobal = 0 ; 
-    while ((res->nbVal < valMaxS) && (tempsGlobal < TEMPSMAX))
+    int i = 0 ; 
+    while ((i < res->len) && (tempsGlobal < TEMPSMAX))
     {
         mesure = mesureTempsExec(prob, f) ; 
         tempsGlobal += mesure ; 
-        
         prob->S += 1 ; 
-        if (res->nbVal >= res->len)
-        {
-            dup = copieTabDouble(res->len, 2*res->len, res->listeTemps) ; 
-            res->len = res->len * 2 ; 
-            free(res->listeTemps) ; 
-            res->listeTemps = dup ; 
-        }
-        res->listeTemps[res->nbVal] = mesure ; 
-        res->nbVal += 1 ; 
+        res->listeTemps[i] = mesure ; 
+        i += 1 ;  
     }
-    for (int i = res->nbVal ; i < res->len ; i++)
-    {
-        res->listeTemps[i] = res->listeTemps[res->nbVal - 1] ; 
-    }
-    
+    double *temp = copieTabDouble(i, res->listeTemps) ; 
+    free(res->listeTemps) ; 
+    res->listeTemps = temp ; 
+    res->len = i ; 
     return res ; 
 }
 
@@ -74,9 +60,8 @@ TabTemps *perfFonctionDeS (int d, int k, int valMaxS, int (*f) (PbResoudre*))
 TabTemps *perfFonctionDeK (int d, int s, int valMaxK, int (*f) (PbResoudre*))
 {
     TabTemps *res = malloc(sizeof(TabTemps)) ; 
-    res->len = 50 ; 
-    res->listeTemps = malloc(sizeof(double) * res->len) ; 
-    res->nbVal = 0 ; 
+    res->len = valMaxK ; 
+    res->listeTemps = malloc(sizeof(double) * res->len) ;
 
     PbResoudre *prob = NULL ; 
 
@@ -84,31 +69,23 @@ TabTemps *perfFonctionDeK (int d, int s, int valMaxK, int (*f) (PbResoudre*))
     double *dup = NULL ; 
     int v = d ; 
     double tempsGlobal = 0 ; 
+    int i = 0 ; 
     // Quand on multiplie un grand nombre par d, il retourne à 0 
-    while ((res->nbVal < valMaxK) && (v != 0) && (tempsGlobal < TEMPSMAX))
+    while ((i < valMaxK) && (v != 0) && (tempsGlobal < TEMPSMAX))
     {
-        prob = genereSystemExpo(res->nbVal + 1, d) ; 
+        prob = genereSystemExpo(i + 1, d) ; 
         prob->S = s ; 
         mesure = mesureTempsExec(prob, f) ; 
         tempsGlobal += mesure ; 
-        
-        if (res->nbVal >= res->len)
-        {
-            dup = copieTabDouble(res->len, 2*res->len, res->listeTemps) ; 
-            res->len = res->len * 2 ; 
-            free(res->listeTemps) ; 
-            res->listeTemps = dup ; 
-        }
-        res->listeTemps[res->nbVal] = mesure ; 
-        res->nbVal += 1 ; 
+        res->listeTemps[i] = mesure ; 
+        i += 1 ; 
         liberePbResoudre(prob) ; 
         v = v * d ; 
     }
-    for (int i = res->nbVal ; i < res->len ; i++)
-    {
-        res->listeTemps[i] = res->listeTemps[res->nbVal - 1] ; 
-    }
-    
+    double *temp = copieTabDouble(i, res->listeTemps) ; 
+    free(res->listeTemps) ; 
+    res->listeTemps = temp ;
+    res->len = i ; 
     return res ; 
 }
 
@@ -133,7 +110,7 @@ int* ecartRelatif (int pmax, int nbBocaux, int f, int nbTirages)
             res[2] += 1 ; 
             while (p->S <= f*pmax)
             {
-                ecart = Algo2_1(p) - AlgoGlout(p) ; 
+                ecart = Algo2_1(p) - Algo3(p) ; 
                 if (ecart < 0)
                 {
                     ecart = -ecart ; 
@@ -184,7 +161,7 @@ void ecrireListeDouble (char *filename, TabTemps *tab)
 {
     FILE *f = fopen(filename, "w") ; 
     printf("Longueur Tableau : %d\n", tab->len) ; 
-    for (int i = 0 ; i < tab->nbVal ; i++)
+    for (int i = 0 ; i < tab->len ; i++)
     {
         fprintf(f, "%d, %f,\n", i, tab->listeTemps[i]) ; 
     }

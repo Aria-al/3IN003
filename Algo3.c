@@ -3,7 +3,7 @@
 #include <limits.h>
 #include "Algo1.h" 
 
-int AlgoGlout (PbResoudre *prob)
+int Algo3 (PbResoudre *prob)
 {
     int i = prob->k - 1 ; 
     int q = prob->S ; 
@@ -16,7 +16,7 @@ int AlgoGlout (PbResoudre *prob)
             i = i - 1 ; 
             d = q - prob->tab[i] ; 
         }
-        q = q - prob->tab[i] ; 
+        q = d ; 
         d = q - prob->tab[i] ; 
         res += 1 ;
     }
@@ -40,7 +40,7 @@ int* tabBocauxRequisAlgo3 (PbResoudre *prob)
             i = i - 1 ; 
             d = q - prob->tab[i] ; 
         }
-        q = q - prob->tab[i] ; 
+        q = d ; 
         d = q - prob->tab[i] ; 
         res[i] += 1 ;
     }
@@ -62,7 +62,7 @@ int testGloutonCompatible (int k, int *tab)
             for (int j = 0 ; j < k ; j++)
             {
                 probC->S = prob->S - prob->tab[j] ; 
-                if ((prob->tab[j] < prob->S) && (AlgoGlout(prob) > 1 + AlgoGlout(probC)))
+                if ((prob->tab[j] < prob->S) && (Algo3(prob) > 1 + Algo3(probC)))
                 {
                     liberePbResoudre(prob) ; 
                     liberePbResoudre(probC) ; 
@@ -192,6 +192,10 @@ int *produitSystemeCapaciteAlea (int len, int pmax)
         while (nbInsere < len)
         {
             int val = rand() % pmax ; 
+            if (val < 1)
+            {
+                val += 2 ; 
+            }
             // Faire un check pour si cette valeur n'est pas 0 OU 1
             if (rechercheDicho(val, res, len) == -1)
             {
@@ -202,6 +206,7 @@ int *produitSystemeCapaciteAlea (int len, int pmax)
     }
 
     // BAND-AID FIX, REPARER L'ERREUR
+    /*
     if (res[0] != 1)
     {
         int d = 0 ; 
@@ -218,6 +223,7 @@ int *produitSystemeCapaciteAlea (int len, int pmax)
             res[i] += d ; 
         }
     }
+    */
     return res ; 
 }
 
