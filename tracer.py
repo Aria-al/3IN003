@@ -1,7 +1,15 @@
 import matplotlib.pyplot as plt 
 import csv 
+from os import listdir
+from os.path import isfile, join
 
-filePath = "Resultats\\TempsAlgo2FonctionS.csv"
+fileNames = ["TempsAlgo1FonctionK.csv", "TempsAlgo1FonctionS.csv", "TempsAlgo2FonctionK.csv", "TempsAlgo2FonctionS.csv", "TempsAlgo3FonctionS.csv", "TempsAlgo3FonctionK.csv"]
+
+
+f = fileNames[5]
+i = f[9]
+c = str(f[-5])
+filePath =  f
 Names = [] 
 Values = [] 
 
@@ -13,13 +21,16 @@ with open(filePath,'r') as csvfile:
 
 plt.scatter(Names, Values, color = 'g',s = 100) 
 plt.xticks(rotation = 25) 
-plt.ylabel('Temps') 
-plt.xlabel('K') 
-X = []
-for i in Names : 
-	if i % 1000 == 0 : 
-		X.append(i) 
-plt.xticks(Names)
-plt.title('Algo 1 en fonction de K', fontsize = 20) 
+plt.ylabel('Temps(s)') 
+plt.xlabel(c) 
+if (c[0] != 'K') : 
+	X = []			
+	k = 20 
+	coef = 0 
+	for i in range(k) : 
+		X.append(Names[int(coef)])
+		coef += int (len(Names) / k)
+	plt.xticks(X)
+plt.title("Algo"+str(i)+"") 
+plt.savefig(f[:-4]+".png")
 
-plt.show() 

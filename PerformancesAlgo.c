@@ -39,12 +39,10 @@ TabTemps *perfFonctionDeS (int d, int k, int valMaxS, int (*f) (PbResoudre*))
     prob->S = 1 ; 
 
     double mesure = 0 ; 
-    double tempsGlobal = 0 ; 
     int i = 0 ; 
-    while ((i < res->len) && (tempsGlobal < TEMPSMAX))
+    while ((i < res->len) && (mesure < TEMPSMAX))
     {
         mesure = mesureTempsExec(prob, f) ; 
-        tempsGlobal += mesure ; 
         prob->S += 1 ; 
         res->listeTemps[i] = mesure ; 
         i += 1 ;  
@@ -68,15 +66,13 @@ TabTemps *perfFonctionDeK (int d, int s, int valMaxK, int (*f) (PbResoudre*))
     double mesure = 0 ; 
     double *dup = NULL ; 
     int v = d ; 
-    double tempsGlobal = 0 ; 
     int i = 0 ; 
     // Quand on multiplie un grand nombre par d, il retourne à 0 
-    while ((i < valMaxK) && (v != 0) && (tempsGlobal < TEMPSMAX))
+    while ((i < valMaxK) && (v != 0))
     {
         prob = genereSystemExpo(i + 1, d) ; 
         prob->S = s ; 
         mesure = mesureTempsExec(prob, f) ; 
-        tempsGlobal += mesure ; 
         res->listeTemps[i] = mesure ; 
         i += 1 ; 
         liberePbResoudre(prob) ; 
@@ -114,12 +110,6 @@ int* ecartRelatif (int pmax, int nbBocaux, int f, int nbTirages)
                 if (ecart < 0)
                 {
                     ecart = -ecart ; 
-                }
-                if (10000 < ecart) 
-                { 
-                    affichePbResoudre(p) ; 
-                    Mat1*m = initialiseMat1(p) ; 
-                    afficheMat1(m) ; 
                 }
                 res[0] = (res[0] < ecart) ? ecart : res[0] ; 
                 res[1] += ecart ; 

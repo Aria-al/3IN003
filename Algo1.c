@@ -3,17 +3,7 @@
 #include <limits.h>
 #include "Algo1.h"
 
-// Minimum entre a et b des relatifs 
-int minimumInt (int a, int b)
-{
-    if (a < b)
-    {
-        return a ; 
-    }
-    return b ; 
-}
-
-// Renvoie la copie des tableau T[k:] de longueur len
+// Renvoie la copie du tableau T[k:] passé en paramètre de longueur len
 int *copieTab (int k, int *T, int len) 
 {
     int *res = malloc(sizeof(int) * (len - k)) ; 
@@ -24,8 +14,7 @@ int *copieTab (int k, int *T, int len)
     return res ; 
 }
 
-// ALGORITHME I 
-
+// Fonction auxiliaire pour l'algorithme 1
 int Aux1(int s, int i,int *cap) 
 {
     if (s == 0)
@@ -43,18 +32,16 @@ int Aux1(int s, int i,int *cap)
     {
         return V1 ; 
     }
-    return minimumInt(V1, V2 + 1) ; 
+    return (V1 < V2 + 1) ? V1 : V2 + 1 ; 
 }
-
-/* Renvoie la valeur de M(S, k), en prenant en paramètre un tableau qui est dans le format suivant : 
-T[0] = S ;  T[1] = k ; T[i] = V[i-2] pour tout i < k*/ 
+// Algorithme 1
 int Algo1 (PbResoudre *p)
 {
-    //affichePbResoudre(p) ; 
     int res = Aux1(p->S, p->k - 1, p->tab) ; 
     return res ; 
 }
 
+// Copie le système de capacité passé en paramètre
 PbResoudre *copiePbResoudre(PbResoudre *p)
 {
     PbResoudre *res = malloc(sizeof(PbResoudre)) ; 
@@ -64,12 +51,14 @@ PbResoudre *copiePbResoudre(PbResoudre *p)
     return res ; 
 }
 
+// Libère le problème 
 void liberePbResoudre (PbResoudre *p)
 {
     free(p->tab) ; 
     free(p) ; 
 }
 
+// Affiche le problème 
 void affichePbResoudre (PbResoudre *p)
 {
     printf("k : %d\nS : %d\n", p->k, p->S) ; 
@@ -80,6 +69,7 @@ void affichePbResoudre (PbResoudre *p)
     printf("\n") ; 
 }
 
+// Génère un système de capacité exponentiel : V[0] = 1, V[1] = d, etc...
 PbResoudre *genereSystemExpo (int k, int d)
 {
     PbResoudre *res = malloc(sizeof(PbResoudre)) ; 
@@ -94,6 +84,7 @@ PbResoudre *genereSystemExpo (int k, int d)
     }
     return res ; 
 }
+
 
 int auxTabBocauxRequisAlgo1 (int s, int i,int *cap, int **tab)
 {
@@ -118,7 +109,7 @@ int auxTabBocauxRequisAlgo1 (int s, int i,int *cap, int **tab)
         return V2 + 1 ; 
     }
 }
-
+// Renvoie le tableau de bocaux nécessaire pour résoudre le problème passé en paramètre 
 int *tabBocauxRequisAlgo1 (PbResoudre *p)
 {
     int *tabRes = malloc(sizeof(int) * p->k) ; 

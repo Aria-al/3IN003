@@ -1,5 +1,0 @@
-Sytème de capacité non-glouton optimal : 
-1, 2, 5, 7, 9, 18
-pour s = 12, on trouve que Algo1 = 2 et AlgoGlouton = 3
-Algo1_Cap = {7, 5} et AlgoGlouton_Cap = {9, 2, 1}
-En général, dans un sytème non-glouton optimal, il existe une quantité S tel que ne pas prendre le pot de plus grande capacité est tel que on gagne en capacité 

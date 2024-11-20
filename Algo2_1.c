@@ -4,8 +4,9 @@
 #include "Algo1.h"
 #include "Algo2_1.h"
 
-/*Dans ce cas, on considère que la matrice est de dimention (s + 1) * (k + 1)*/
-// Retourne mat->m[i][j], INT_MAX le cas écheant 
+/*
+Retourne le coefficient mat->m[i][j], INT_MAX le cas écheant 
+*/
 int valeurDansMatrice1 (int i, int j, Mat1 *mat)
 {
     if ((i >= 0) && (j >= 0) && (i <= mat->p->S) && (j <= mat->p->k))
@@ -16,7 +17,7 @@ int valeurDansMatrice1 (int i, int j, Mat1 *mat)
 }
 
 /*
-Trouve la valeur suivante du coefficient m(i, j), avec : 
+Trouve la valeur du coefficient m(i, j), avec : 
 - cap : le tableau des capacités de pots 
 - m : matrice de dimension (s + 1) * (k + 1)
 - i : la quantité restante à stocker 
@@ -30,8 +31,7 @@ int calculeCoef1 (int i, int j, Mat1 *mat)
     {
         memeColonneCoef = INT_MAX - 1 ; 
     }
-
-    return minimumInt(memeLigneCoef, memeColonneCoef + 1) ; 
+    return (memeLigneCoef < memeColonneCoef + 1) ? memeLigneCoef : memeColonneCoef + 1 ; 
 }
 
 // Renvoie une matrice d'entiers non initialisé de taille (s+1) * (k+1)
@@ -47,8 +47,7 @@ int **creeMat1 (PbResoudre *prob)
     return Mat ; 
 }
 
-// Initalise la matrice des pots nécessaires, avec les capacités des pots dans cap 
-Mat1 *initialiseMat1 (PbResoudre *prob)
+Mat1 *Aux2 (PbResoudre *prob)
 {
     Mat1 *res = malloc(sizeof(Mat1)) ; 
 
@@ -76,6 +75,27 @@ Mat1 *initialiseMat1 (PbResoudre *prob)
     return res ; 
 }
 
+// Libère la mémoire occupé par une matrice de taille (s+1)*(k+1)
+void libereMat1 (Mat1 *mat)
+{
+    for (int i = 0 ; i < mat->p->S + 1 ; i++)
+    {
+        free(mat->m[i]) ; 
+    }
+    liberePbResoudre(mat->p) ; 
+    free(mat->m) ; 
+    free(mat) ; 
+}
+
+// Renvoie la matrice M de l'algorithme 2 
+int Algo2_1 (PbResoudre *p)
+{
+    Mat1 *mat = Aux2(p) ; 
+    int res = mat->m[mat->p->S][mat->p->k] ; 
+    libereMat1(mat) ; 
+    return res ; 
+}
+
 void afficheMat1 (Mat1 *mat)
 {
     for (int i = 0 ; i < mat->p->S + 1 ; i++) 
@@ -94,27 +114,6 @@ void afficheMat1 (Mat1 *mat)
         }
         printf("]\n") ; 
     }
-}
-
-// Libère la mémoire occupé par une matrice de taille (s+1)*(k+1)
-void libereMat1 (Mat1 *mat)
-{
-    for (int i = 0 ; i < mat->p->S + 1 ; i++)
-    {
-        free(mat->m[i]) ; 
-    }
-    liberePbResoudre(mat->p) ; 
-    free(mat->m) ; 
-    free(mat) ; 
-}
-
-int Algo2_1 (PbResoudre *p)
-{
-    Mat1 *mat = initialiseMat1(p) ; 
-    int res = mat->m[mat->p->S][mat->p->k] ; 
-    //afficheMat1(mat) ; 
-    libereMat1(mat) ; 
-    return res ; 
 }
 
 int *auxTabBocauxRequisAlgo2 (int i, int j, Mat1 *mat, int *tab)

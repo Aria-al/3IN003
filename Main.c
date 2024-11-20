@@ -27,8 +27,10 @@ int main(int argc, char const *argv[])
     {
         progr = atoi(argv[1]) ; 
 
-        // Option 1 : calculer les bocaux nécessaire pour faire le système contenu dans le fichier argv[1] par l'algorithme
         /*
+        Option 1 : calculer les bocaux nécessaire pour faire le 
+        système contenu dans le fichier passé dans le paramètre 
+        argv[1] par l'algorithme : 
         1 - algo1
         2 - algo2
         3 - Algo3on
@@ -41,7 +43,10 @@ int main(int argc, char const *argv[])
             PbResoudre *prob = litProbleme(fileName) ; 
             int *res = NULL ; 
 
-            // On choisit par défaut l'algorithme 2, il est rapide et correct 
+            /*
+            On choisit par défaut l'algorithme 2, il est rapide et renvoie la bonne 
+            valeur de m(S, k)
+            */ 
             switch (algoChoisi)
             {
             case 1 :
@@ -86,7 +91,7 @@ int main(int argc, char const *argv[])
             
             PbResoudre *prob = litProbleme(fileName) ;    
             printf("Le systeme : ") ; 
-            afficheListe(prob->tab, prob->k) ; 
+            affichePbResoudre(prob) ; 
             if (testGloutonCompatible(prob->k, prob->tab))
             {
                 printf("Est glouton-compatible\n") ; 
@@ -99,9 +104,9 @@ int main(int argc, char const *argv[])
 
         /*
         Option 3 : permet de tester la proportion de systèmes glouton-compatible avec : 
-        argv[2] = nbBocaux 
-        argv[3] = pmax 
-        argv[4] = nbSysteme
+        argv[2] = nbBocaux : nombre de bocaux maximaux  
+        argv[3] = pmax : valeur maximale de V[i]
+        argv[4] = nbSysteme : nombre de systèmes 
         */ 
         else if ((progr == 3) && (argc == 5))
         {
@@ -141,8 +146,11 @@ int main(int argc, char const *argv[])
 
         /*
         Option 4 : donne le temps d'éxécution de la resolution d'un problème en fonction d'un algorithme : 
-        argv[2] = fichier contenant le problème 
-        argv[3] = algorithme 
+        argv[2] = nom du fichier contenant le problème 
+        argv[3] = algorithme choisi, avec :
+            - 1 : Algorithme 1 
+            - 2 : Algorithme 2 
+            - 3 : Algorihme 3 
         */
         else if ((progr == 4) && (argc == 4))
         {
@@ -173,76 +181,57 @@ int main(int argc, char const *argv[])
             printf("Parametre %s incorrect\n", argv[1]) ; 
         }
     }
-
-    double time1, timediff ;   
-    time1 = (double) clock() ;            
-    time1 = time1 / CLOCKS_PER_SEC ;
     // Tests de performances 
     TabTemps **liste = malloc(sizeof(TabTemps*) * 3) ; 
-    int valMaxS = 100000 ;
+    int valMaxS = 1000 ;
     int it = 1 ;  
     liste[0] = perfFonctionDeS(2, 13, valMaxS, Algo1) ; 
     liste[1] = perfFonctionDeS(3, 9, liste[0]->len, Algo1) ; 
     liste[2] = perfFonctionDeS(4, 7, liste[0]->len, Algo1) ; 
-    ecrireListeDoubleSystemeExpo("./Resultats/TempsAlgo1FonctionS.csv", liste) ; 
+    ecrireListeDoubleSystemeExpo("TempsAlgo1FonctionS.csv", liste) ; 
     AuxFonctionLibereTripleListe(liste) ; 
     printf("%d\n", it) ; 
     it += 1 ; 
     liste[0] = perfFonctionDeS(2, 13, valMaxS, Algo2_1) ; 
     liste[1] = perfFonctionDeS(3, 9, liste[0]->len, Algo2_1) ; 
     liste[2] = perfFonctionDeS(4, 7, liste[0]->len, Algo2_1) ; 
-    ecrireListeDoubleSystemeExpo("./Resultats/TempsAlgo2FontionS.csv", liste) ; 
+    ecrireListeDoubleSystemeExpo("TempsAlgo2FonctionS.csv", liste) ; 
     AuxFonctionLibereTripleListe(liste) ; 
     printf("%d\n", it) ; 
     it += 1 ; 
     liste[0] = perfFonctionDeS(2, 13, valMaxS, Algo3) ; 
     liste[1] = perfFonctionDeS(3, 9, liste[0]->len, Algo3) ; 
     liste[2] = perfFonctionDeS(4, 7, liste[0]->len, Algo3) ; 
-    ecrireListeDoubleSystemeExpo("./Resultats/TempsAlgo3FontionS.csv", liste) ; 
+    ecrireListeDoubleSystemeExpo("TempsAlgo3FonctionS.csv", liste) ; 
     AuxFonctionLibereTripleListe(liste) ; 
     printf("%d\n", it) ; 
     it += 1 ; 
-    int S = 100000 ; 
+    int S = 1000 ; 
     int valMaxK = 40 ; 
     liste[0] = perfFonctionDeK(2, 400, 10, Algo1) ; 
     liste[1] = perfFonctionDeK(3, 400, liste[0]->len, Algo1) ; 
     liste[2] = perfFonctionDeK(4, 400, liste[0]->len, Algo1) ; 
-    ecrireListeDoubleSystemeExpo("./Resultats/TempsAlgo1FonctionK.csv", liste) ; 
+    ecrireListeDoubleSystemeExpo("TempsAlgo1FonctionK.csv", liste) ; 
     AuxFonctionLibereTripleListe(liste) ; 
     printf("%d\n", it) ; 
     it += 1 ; 
     liste[0] = perfFonctionDeK(2, S, valMaxK, Algo2_1) ; 
     liste[1] = perfFonctionDeK(3, S, liste[0]->len, Algo2_1) ; 
     liste[2] = perfFonctionDeK(4, S, liste[0]->len, Algo2_1) ; 
-    ecrireListeDoubleSystemeExpo("./Resultats/TempsAlgo2FonctionK.csv", liste) ; 
+    ecrireListeDoubleSystemeExpo("TempsAlgo2FonctionK.csv", liste) ; 
     AuxFonctionLibereTripleListe(liste) ; 
     printf("%d\n", it) ; 
     it += 1 ; 
     liste[0] = perfFonctionDeK(2, S, valMaxK, Algo3) ; 
     liste[1] = perfFonctionDeK(3, S, liste[0]->len, Algo3) ; 
     liste[2] = perfFonctionDeK(4, S, liste[0]->len, Algo3) ; 
-    ecrireListeDoubleSystemeExpo("./Resultats/TempsAlgo3FonctionK.csv", liste) ; 
+    ecrireListeDoubleSystemeExpo("TempsAlgo3FonctionK.csv", liste) ; 
     AuxFonctionLibereTripleListe(liste) ; 
     printf("%d\n", it) ; 
     it += 1 ; 
     free(liste) ; 
-    /*
-    */
-    srand(time(NULL));
-    // Gros problème avec algo 2, ne marche pas la plupart du temps, hallucine des valeurs 
-    /*
     
-    PbResoudre *p = litProbleme("Probleme1.txt") ; 
-    Algo2_1(p) ; 
-    p->S = 813 ; 
-    affichePbResoudre(p) ; 
-    afficheMat1(initialiseMat1(p)) ; 
-    int *tabRes = ecartRelatif(100, 5, 2, 1000) ; 
-    printf("Pire ecart max : %d\nDifference moy : %d\nNbSystemeNGC : %d\n", tabRes[0], tabRes[1], tabRes[2]) ; 
-    */
     
-    timediff = ( ((double) clock()) / CLOCKS_PER_SEC) - time1 ;
-    printf("Temps total : %f\n", timediff) ; 
 
     return 0 ; 
     

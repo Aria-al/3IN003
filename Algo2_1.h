@@ -15,7 +15,7 @@ typedef struct _Matrice1
 int valeurDansMatrice1 (int i, int j, Mat1 *mat) ; 
 int calculeCoef1 (int i, int j, Mat1 *mat) ; 
 int **creeMat1 (PbResoudre *prob) ; 
-Mat1 *initialiseMat1 (PbResoudre *prob) ; 
+Mat1 *Aux2 (PbResoudre *prob) ; 
 void libereMat1 (Mat1 *mat) ; 
 void afficheMat1 (Mat1 *mat) ; 
 int Algo2_1 (PbResoudre *p) ; 

@@ -12,7 +12,6 @@ typedef struct _problemeResoudre
 } PbResoudre ;
 
 
-int minimumInt (int a, int b) ; 
 int *copieTab (int k, int *T, int len) ; 
 int Aux1(int s, int i,int *cap) ; 
 int Algo1 (PbResoudre *T) ;
